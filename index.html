@@ -2,12 +2,126 @@
 <html>
 <head>
     <link href="css/metro.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
     <!-- <script src="jquery.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="js/metro.js"></script>
+    <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+		$(function() {
+		  $( ".draggable" ).draggable({
+		      appendTo: "body",
+		      helper: "clone"
+		   });
+		  $( ".droppable" ).droppable({
+		  	drop: function(event, ui) {
+		  		ui.draggable.clone().appendTo( this );
+		  	}
+		  });
+		});
+	</script>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <div class="countdown" data-role="countdown" data-days="2"></div>
+  <div class="grid">
+    <div class="row cells4">
+        <div class="cell" id="input-cell">
+        	<h2>Input elements:</h2>
+        	<!-- <div id="filler"></div> -->
+        	<div id="textInputDiv" class="draggable">
+        	  <label>Text input:</label>
+        	  <div class="input-control text">
+                 <input type="text" placeholder="Input your text here...">
+              </div>
+            </div>
+            <div id="checkboxes" class="draggable">
+                <label>Checkboxes: </label>
+            	<label class="input-control checkbox small-check">
+				  <input type="checkbox" checked>
+				  <span class="check"></span>
+				  <span class="caption">Checkbox</span>
+				</label>
+				<label class="input-control checkbox small-check">
+				  <input type="checkbox" checked>
+				  <span class="check"></span>
+				  <span class="caption">Checkbox</span>
+				</label>
+				<label class="input-control checkbox small-check">
+				  <input type="checkbox" checked>
+				  <span class="check"></span>
+				  <span class="caption">Checkbox</span>
+				</label>
+            </div>
+            <div id="radioButtonsDiv" class="draggable">
+              <label>Radio buttons: </label>
+              <label class="input-control radio small-check">
+			    <input type="radio">
+			    <span class="check"></span>
+			    <span class="caption">Small radio</span>
+			  </label>
+			  <label class="input-control radio small-check">
+			    <input type="radio">
+			    <span class="check"></span>
+			    <span class="caption">Small radio</span>
+			  </label>
+            </div>
+            <div id="switchersDiv" class="draggable">
+              <label>Switchers: </label>
+              <label class="switch-original">
+			    <input type="checkbox">
+			    <span class="check"></span>
+			  </label>
+			  <label class="switch-original">
+			    <input type="checkbox">
+			    <span class="check"></span>
+			  </label>
+            </div>
+            <div id="textBoxDiv" class="draggable">
+              <label>Textbox: </label>
+              <div class="input-control textarea">
+			    <textarea></textarea>
+			  </div>
+            </div>
+            <div id="multiSelectDiv" class="draggable">
+              <label>Selection: </label>
+              <div class="input-control select">
+				<select>
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				</select>
+			  </div>
+            </div>
+            <div id="fileUploadDiv" class="draggable">
+              <div class="input-control file" data-role="input">
+                <label>File Upload: </label>
+			    <input type="file">
+			    <button class="button"><span class="mif-folder">Upload</span></button>
+			  </div>
+            </div>
+            <div id="buttonsDiv" class="draggable">
+              <label>Buttons: </label>
+              <input type="button" value="Button">
+			  <input type="reset" value="Reset">
+			  <input type="submit" value="Submit">
+            </div>
+            <div id="slidersDiv" class="draggable">
+               <label>Sliders: </label>
+               <div class="input-control range">
+				<input type="range">
+			   </div>
+            </div>
+        </div>
+        <div class="cell colspan2 droppable" style="height: 600px;">
+        	<h2>Drop here</h2>
+        </div>
+        <div class="cell">
+            <h2>Status</h2>
+            <h4>Current screen: Input</h4>
+            <input type="button" value="Save Screen">
+            <input type="button" value="Next Screen">
+            <input type="button" value="Prev Screen">
+        </div>
+    </div>
+  </div>
 </body>
 </html>
