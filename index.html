@@ -12,6 +12,7 @@
     <script src="js/metro.js"></script>
     <script src="js/jquery-ui/jquery-ui.min.js"></script>
     <script>
+        created_ids = [];
         screens = {
         	"input" : {
 
@@ -27,27 +28,26 @@
         	}
         }
         properties = {
-        	"text-input": ["title", "placeholder"],
-        	"checkboxes": ["title", "number", "names"],
-        	"radio-buttons": ["title", "number", "names"],
-        	"switcher": ["title"],
-        	"textbox": ["title"],
-        	"selection": ["title", "selections"],
-        	"fileupload": ["title"],
+        	"textInput": ["title", "placeholder"],
+        	"checkboxes": ["title", "names"],
+        	"radioButtons": ["title", "names"],
+        	"switchers": ["title"],
+        	"textBox": ["title"],
+        	"multiSelect": ["title", "names"],
+        	"fileUpload": ["title"],
         	"buttons": ["title"],
         	"sliders": ["title"]
         }
         function update_element(element_id) {
-        	console.log("I got called!");
-            text_id = (element_id.split('-')[1]);
-            console.log(text_id);
-            console.log(element_id);
-            title_val = $(element_id).children(".input-control").children(".title-input").val();
-            console.log(title_val);
+            text_id = (element_id.split('-')[1]);      
+            title_val = $(element_id).children(".input-control").children(".title-input").val();           
             place_val = $(element_id).children(".input-control").children(".placeholder-input").val();
-            console.log(place_val);
             $("#" + text_id + " > " + "label").text(title_val);
             $("#" + text_id).children(".input-control").children("input").prop("placeholder", place_val);
+        }
+        function delete_element(id) {
+        	$("#" + id).remove();
+        	$("#dialog-" + id).remove();
         }
         function generate_html(type, option) {
         	if (option == "title") {
@@ -58,17 +58,19 @@
         		return '<label>Enter placeholder: </label>' +
         	  '<div class="input-control text"><input type="text" class="placeholder-input"></div><div></div>'
         	}
+        	else if (option == "names") {
+        		return '<label>Enter various values(seperate by commas): </label>' +
+        		'<div class="input-control text"><input type="text" class="checkbox-input"></div><div></div>'
+        	}
         }
         function generate_dialog(type, id) {
         	header_str = '<div data-role="dialog" id="' + id +'" class="padding20" data-close-button="true">';
         	body_str = properties[type].map(function (opt) {
         		return generate_html(type, opt);
         	}).join("");
-        	// body_str = ''
-        	// for (str in properties[type]) {
-        	// 	body_str += generate_html(str);
-        	// }
-        	footer_str = '<button class="button" id="button-' + ((id.split('-')[1]) + '') + '">Save</button><div>';
+        	footer_str = '<button class="button" id="button-' + ((id.split('-')[1]) + '') + '">Save</button>'
+        	           + '<button class="button" id="delete-' + ((id.split('-')[1]) + '') + '">Delete</button>'
+        	           + '</div>';
         	return header_str + body_str + footer_str;
         }
         function showDialog(id){
@@ -86,17 +88,26 @@
 		  		new_id = Math.floor((Math.random() * 100000) + 1);
 		  		copy_el.prop('id', (new_id + ''));
 		  		copy_el.appendTo( this );
-		  		copy_el.append(generate_dialog("text-input", "dialog" + "-" + (new_id + '')));
-		  		$("#button-" + (new_id + '')).click(function() {
-		  		   console.log("I am getting called!");
-                   update_element("#dialog" + "-" + (new_id + ''));
-		  		});
-		  		copy_el.dblclick(function() {
-		  			showDialog("#dialog" + "-" + (new_id + ''));
-		  		});
+		  		class_type = copy_el.prop('class').split(" ")[0];
+		  		copy_el.append(generate_dialog(class_type, "dialog" + "-" + new_id));
+		  		created_ids.push(new_id);
+		  		refresh_events();
 		  	}
 		  });
 		});
+		function refresh_events() {
+			created_ids.map(function(id) {
+			  $("#" + id).dblclick(function() {
+				showDialog("#dialog" + "-" + id);
+			  });
+			  $("#button-"+ id).click(function() {
+				update_element("#dialog" + "-" + id);
+			  });
+			  $("#delete-" + id).click(function() {
+			  	delete_element(id);
+			  });
+		    });
+		}
 	</script>
 </head>
 <body>
@@ -104,21 +115,13 @@
     <div class="row cells4">
         <div class="cell" id="input-cell">
         	<h2>Input elements:</h2>
-        	<!-- <div id="filler"></div> -->
-        	<div id="textInputDiv" class="draggable">
-        	  <!-- <div data-role="dialog" id="dialog" class="padding20" data-close-button="true">
-			    <h1>Simple dialog</h1>
-			    <p>
-			        Dialog :: Metro UI CSS - The front-end framework
-			        for developing projects on the web in Windows Metro Style.
-			    </p>
-			  </div> -->
+        	<div id="textInputDiv" class="textInput draggable">
         	  <label>Text input:</label>
         	  <div class="input-control text">
                  <input type="text" placeholder="Input your text here...">
               </div>
             </div>
-            <div id="checkboxes" class="draggable">
+            <div id="checkboxes" class="checkboxes draggable">
                 <label>Checkboxes: </label>
             	<label class="input-control checkbox small-check">
 				  <input type="checkbox" checked>
@@ -136,7 +139,7 @@
 				  <span class="caption">Checkbox</span>
 				</label>
             </div>
-            <div id="radioButtonsDiv" class="draggable">
+            <div id="radioButtonsDiv" class="radioButtons draggable">
               <label>Radio buttons: </label>
               <label class="input-control radio small-check">
 			    <input type="radio">
@@ -149,7 +152,7 @@
 			    <span class="caption">Small radio</span>
 			  </label>
             </div>
-            <div id="switchersDiv" class="draggable">
+            <div id="switchersDiv" class="switchers draggable">
               <label>Switchers: </label>
               <label class="switch-original">
 			    <input type="checkbox">
@@ -160,13 +163,13 @@
 			    <span class="check"></span>
 			  </label>
             </div>
-            <div id="textBoxDiv" class="draggable">
+            <div id="textBoxDiv" class="textBox draggable">
               <label>Textbox: </label>
               <div class="input-control textarea">
 			    <textarea></textarea>
 			  </div>
             </div>
-            <div id="multiSelectDiv" class="draggable">
+            <div id="multiSelectDiv" class="multiSelect draggable">
               <label>Selection: </label>
               <div class="input-control select">
 				<select>
@@ -176,20 +179,20 @@
 				</select>
 			  </div>
             </div>
-            <div id="fileUploadDiv" class="draggable">
+            <div id="fileUploadDiv" class="fileUpload draggable">
               <div class="input-control file" data-role="input">
                 <label>File Upload: </label>
 			    <input type="file">
 			    <button class="button"><span class="mif-folder"></span></button>
 			  </div>
             </div>
-            <div id="buttonsDiv" class="draggable">
+            <div id="buttonsDiv" class="buttons draggable">
               <label>Buttons: </label>
               <input type="button" value="Button">
 			  <input type="reset" value="Reset">
 			  <input type="submit" value="Submit">
             </div>
-            <div id="slidersDiv" class="draggable">
+            <div id="slidersDiv" class="sliders draggable">
                <label>Sliders: </label>
                <div class="slider" data-role="slider"></div>
             </div>
