@@ -2,12 +2,79 @@
 <html>
 <head>
     <link href="css/metro.css" rel="stylesheet">
+    <link href="css/metro-icons.css" rel="stylesheet">
+    <link href="css/metro-responsive.css" rel="stylesheet">
+    <link href="css/metro-rtl.css" rel="stylesheet">
+    <link href="css/metro-schemes.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
     <!-- <script src="jquery.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="js/metro.js"></script>
     <script src="js/jquery-ui/jquery-ui.min.js"></script>
     <script>
+        screens = {
+        	"input" : {
+
+        	},
+        	"review" : {
+
+        	},
+        	"kbe" : {
+
+        	},
+        	"final" : {
+
+        	}
+        }
+        properties = {
+        	"text-input": ["title", "placeholder"],
+        	"checkboxes": ["title", "number", "names"],
+        	"radio-buttons": ["title", "number", "names"],
+        	"switcher": ["title"],
+        	"textbox": ["title"],
+        	"selection": ["title", "selections"],
+        	"fileupload": ["title"],
+        	"buttons": ["title"],
+        	"sliders": ["title"]
+        }
+        function update_element(element_id) {
+        	console.log("I got called!");
+            text_id = (element_id.split('-')[1]);
+            console.log(text_id);
+            console.log(element_id);
+            title_val = $(element_id).children(".input-control").children(".title-input").val();
+            console.log(title_val);
+            place_val = $(element_id).children(".input-control").children(".placeholder-input").val();
+            console.log(place_val);
+            $("#" + text_id + " > " + "label").text(title_val);
+            $("#" + text_id).children(".input-control").children("input").prop("placeholder", place_val);
+        }
+        function generate_html(type, option) {
+        	if (option == "title") {
+        	   return '<label>Enter title: </label>' +
+        	  '<div class="input-control text"><input type="text" class="title-input"></div><div></div>'
+        	}
+        	else if (option == "placeholder") {
+        		return '<label>Enter placeholder: </label>' +
+        	  '<div class="input-control text"><input type="text" class="placeholder-input"></div><div></div>'
+        	}
+        }
+        function generate_dialog(type, id) {
+        	header_str = '<div data-role="dialog" id="' + id +'" class="padding20" data-close-button="true">';
+        	body_str = properties[type].map(function (opt) {
+        		return generate_html(type, opt);
+        	}).join("");
+        	// body_str = ''
+        	// for (str in properties[type]) {
+        	// 	body_str += generate_html(str);
+        	// }
+        	footer_str = '<button class="button" id="button-' + ((id.split('-')[1]) + '') + '">Save</button><div>';
+        	return header_str + body_str + footer_str;
+        }
+        function showDialog(id){
+          var dialog = $(id).data('dialog');
+          dialog.open();
+        }
 		$(function() {
 		  $( ".draggable" ).draggable({
 		      appendTo: "body",
@@ -15,7 +82,18 @@
 		   });
 		  $( ".droppable" ).droppable({
 		  	drop: function(event, ui) {
-		  		ui.draggable.clone().appendTo( this );
+		  		var copy_el = ui.draggable.clone();
+		  		new_id = Math.floor((Math.random() * 100000) + 1);
+		  		copy_el.prop('id', (new_id + ''));
+		  		copy_el.appendTo( this );
+		  		copy_el.append(generate_dialog("text-input", "dialog" + "-" + (new_id + '')));
+		  		$("#button-" + (new_id + '')).click(function() {
+		  		   console.log("I am getting called!");
+                   update_element("#dialog" + "-" + (new_id + ''));
+		  		});
+		  		copy_el.dblclick(function() {
+		  			showDialog("#dialog" + "-" + (new_id + ''));
+		  		});
 		  	}
 		  });
 		});
@@ -28,6 +106,13 @@
         	<h2>Input elements:</h2>
         	<!-- <div id="filler"></div> -->
         	<div id="textInputDiv" class="draggable">
+        	  <!-- <div data-role="dialog" id="dialog" class="padding20" data-close-button="true">
+			    <h1>Simple dialog</h1>
+			    <p>
+			        Dialog :: Metro UI CSS - The front-end framework
+			        for developing projects on the web in Windows Metro Style.
+			    </p>
+			  </div> -->
         	  <label>Text input:</label>
         	  <div class="input-control text">
                  <input type="text" placeholder="Input your text here...">
@@ -95,7 +180,7 @@
               <div class="input-control file" data-role="input">
                 <label>File Upload: </label>
 			    <input type="file">
-			    <button class="button"><span class="mif-folder">Upload</span></button>
+			    <button class="button"><span class="mif-folder"></span></button>
 			  </div>
             </div>
             <div id="buttonsDiv" class="draggable">
@@ -106,9 +191,7 @@
             </div>
             <div id="slidersDiv" class="draggable">
                <label>Sliders: </label>
-               <div class="input-control range">
-				<input type="range">
-			   </div>
+               <div class="slider" data-role="slider"></div>
             </div>
         </div>
         <div class="cell colspan2 droppable" style="height: 600px;">
@@ -118,6 +201,7 @@
             <h2>Status</h2>
             <h4>Current screen: Input</h4>
             <input type="button" value="Save Screen">
+            <div></div>
             <input type="button" value="Next Screen">
             <input type="button" value="Prev Screen">
         </div>

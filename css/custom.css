@@ -1,12 +1,12 @@
-.break {
+/*.break {
 	display: none;
 	float: none;
-}
+}*/
 
 .cell > div {
 	padding-bottom: 10px;
 }
 
 .cell {
-	padding-left: 20px;
+	padding-left: 10px;
 }
