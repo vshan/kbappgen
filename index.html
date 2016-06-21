@@ -42,8 +42,48 @@
             text_id = (element_id.split('-')[1]);      
             title_val = $(element_id).children(".input-control").children(".title-input").val();           
             place_val = $(element_id).children(".input-control").children(".placeholder-input").val();
-            $("#" + text_id + " > " + "label").text(title_val);
-            $("#" + text_id).children(".input-control").children("input").prop("placeholder", place_val);
+            multi_val = $(element_id).children(".input-control").children(".multi-input").val();
+
+            class_type = $("#" + text_id).prop('class').split(" ")[0];
+
+            $("#" + text_id + " > " + "label:first-child").text(title_val);
+
+            if (class_type == "textInput") {     
+              $("#" + text_id).children(".input-control").children("input").prop("placeholder", place_val);
+            }
+            else if (class_type == "checkboxes") {
+              $("#" + text_id).children(".input-control").remove();
+              check_labels = multi_val.split(",").map(function(label) {
+              	return '<label class="input-control checkbox small-check">' +
+              	       '<input type="checkbox" checked>' +
+              	       '<span class="check"></span>' +
+              	       '<span class="caption">' + label + '</span>' +
+              	       '</label>'
+              }).join("");
+              $("#" + text_id).append(check_labels);
+            }
+            else if (class_type == "radioButtons") {
+            	$("#" + text_id).children(".input-control").remove();
+            	radio_labels = multi_val.split(",").map(function(label) {
+            		return '<label class="input-control radio small-check">' +
+			               '<input type="radio">' +
+			               '<span class="check"></span>' +
+			               '<span class="caption">' + label + '</span>' +
+			               '</label>';
+            	}).join("");
+            	$("#" + text_id).append(radio_labels);
+            }
+            else if (class_type == "multiSelect") {
+            	$("#" + text_id + " select").children().remove();
+            	select_labels = multi_val.split(",").map(function(label) {
+                    return '<option>' + label + '</option>';
+            	}).join("");
+            	$("#" + text_id + " select").append(select_labels);
+            }
+            else if (class_type == "buttons") {
+            	$("#" + text_id + " input").prop("value", title_val);
+            	$("#" + text_id + " > label").remove();
+            }
         }
         function delete_element(id) {
         	$("#" + id).remove();
@@ -60,7 +100,7 @@
         	}
         	else if (option == "names") {
         		return '<label>Enter various values(seperate by commas): </label>' +
-        		'<div class="input-control text"><input type="text" class="checkbox-input"></div><div></div>'
+        		'<div class="input-control text"><input type="text" class="multi-input"></div><div></div>'
         	}
         }
         function generate_dialog(type, id) {
@@ -133,11 +173,6 @@
 				  <span class="check"></span>
 				  <span class="caption">Checkbox</span>
 				</label>
-				<label class="input-control checkbox small-check">
-				  <input type="checkbox" checked>
-				  <span class="check"></span>
-				  <span class="caption">Checkbox</span>
-				</label>
             </div>
             <div id="radioButtonsDiv" class="radioButtons draggable">
               <label>Radio buttons: </label>
@@ -153,12 +188,8 @@
 			  </label>
             </div>
             <div id="switchersDiv" class="switchers draggable">
-              <label>Switchers: </label>
+              <label>Switcher: </label>
               <label class="switch-original">
-			    <input type="checkbox">
-			    <span class="check"></span>
-			  </label>
-			  <label class="switch-original">
 			    <input type="checkbox">
 			    <span class="check"></span>
 			  </label>
@@ -187,10 +218,8 @@
 			  </div>
             </div>
             <div id="buttonsDiv" class="buttons draggable">
-              <label>Buttons: </label>
+              <label>Button: </label>
               <input type="button" value="Button">
-			  <input type="reset" value="Reset">
-			  <input type="submit" value="Submit">
             </div>
             <div id="slidersDiv" class="sliders draggable">
                <label>Sliders: </label>
