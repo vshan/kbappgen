@@ -11,7 +11,99 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="js/metro.js"></script>
     <script src="js/jquery-ui/jquery-ui.min.js"></script>
-    <script>
+</head>
+<body>
+  <div class="grid">
+    <div class="row cells4">
+        <div class="cell" id="input-cell">
+        	<h2>Input elements:</h2>
+        	<div id="textInputDiv" class="textInput draggable">
+        	  <label>Text input:</label>
+        	  <div class="input-control text">
+                 <input type="text" placeholder="Input your text here...">
+              </div>
+            </div>
+            <div id="checkboxes" class="checkboxes draggable">
+                <label>Checkboxes: </label>
+            	<label class="input-control checkbox small-check">
+				  <input type="checkbox" checked>
+				  <span class="check"></span>
+				  <span class="caption">Checkbox</span>
+				</label>
+				<label class="input-control checkbox small-check">
+				  <input type="checkbox" checked>
+				  <span class="check"></span>
+				  <span class="caption">Checkbox</span>
+				</label>
+            </div>
+            <div id="radioButtonsDiv" class="radioButtons draggable">
+              <label>Radio buttons: </label>
+              <label class="input-control radio small-check">
+			    <input type="radio">
+			    <span class="check"></span>
+			    <span class="caption">Small radio</span>
+			  </label>
+			  <label class="input-control radio small-check">
+			    <input type="radio">
+			    <span class="check"></span>
+			    <span class="caption">Small radio</span>
+			  </label>
+            </div>
+            <div id="switchersDiv" class="switchers draggable">
+              <label>Switcher: </label>
+              <label class="switch-original">
+			    <input type="checkbox">
+			    <span class="check"></span>
+			  </label>
+            </div>
+            <div id="textBoxDiv" class="textBox draggable">
+              <label>Textbox: </label>
+              <div class="input-control textarea">
+			    <textarea></textarea>
+			  </div>
+            </div>
+            <div id="multiSelectDiv" class="multiSelect draggable">
+              <label>Selection: </label>
+              <div class="input-control select">
+				<select>
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				</select>
+			  </div>
+            </div>
+            <div id="fileUploadDiv" class="fileUpload draggable">
+              <div class="input-control file" data-role="input">
+                <label>File Upload: </label>
+			    <input type="file">
+			    <button class="button"><span class="mif-folder"></span></button>
+			  </div>
+            </div>
+            <div id="buttonsDiv" class="buttons draggable">
+              <label>Button: </label>
+              <input type="button" value="Button">
+            </div>
+            <div id="slidersDiv" class="sliders draggable">
+               <label>Sliders: </label>
+               <div class="slider" data-role="slider"></div>
+            </div>
+        </div>
+        <div class="cell colspan2 droppable" style="height: 600px;" id="drawspace">
+        	<h2>Input Screen</h2>
+        </div>
+        <div class="cell">
+            <h2>Status</h2>
+            <h4>Current screen: <span id="screen_status">INPUT</span></h4>
+            <input type="button" value="Save To Disk">
+            <div></div>
+            <input type="button" value="Next Screen" onclick="get_next_screen()">
+            <input type="button" value="Prev Screen" onclick="get_prev_screen()">
+        </div>
+    </div>
+  </div>
+</body>
+<script>
+        GLOBAL_COUNTER = 0;
         created_ids = [];
         
         screens = {
@@ -156,7 +248,7 @@
 		  $( ".droppable" ).droppable({
 		  	drop: function(event, ui) {
 		  		var copy_el = ui.draggable.clone();
-		  		new_id = Math.floor((Math.random() * 100000) + 1);
+		  		new_id = GLOBAL_COUNTER++;
 		  		copy_el.prop('id', (new_id + ''));
 		  		copy_el.appendTo( this );
 		  		class_type = copy_el.prop('class').split(" ")[0];
@@ -180,95 +272,4 @@
 		    });
 		}
 	</script>
-</head>
-<body>
-  <div class="grid">
-    <div class="row cells4">
-        <div class="cell" id="input-cell">
-        	<h2>Input elements:</h2>
-        	<div id="textInputDiv" class="textInput draggable">
-        	  <label>Text input:</label>
-        	  <div class="input-control text">
-                 <input type="text" placeholder="Input your text here...">
-              </div>
-            </div>
-            <div id="checkboxes" class="checkboxes draggable">
-                <label>Checkboxes: </label>
-            	<label class="input-control checkbox small-check">
-				  <input type="checkbox" checked>
-				  <span class="check"></span>
-				  <span class="caption">Checkbox</span>
-				</label>
-				<label class="input-control checkbox small-check">
-				  <input type="checkbox" checked>
-				  <span class="check"></span>
-				  <span class="caption">Checkbox</span>
-				</label>
-            </div>
-            <div id="radioButtonsDiv" class="radioButtons draggable">
-              <label>Radio buttons: </label>
-              <label class="input-control radio small-check">
-			    <input type="radio">
-			    <span class="check"></span>
-			    <span class="caption">Small radio</span>
-			  </label>
-			  <label class="input-control radio small-check">
-			    <input type="radio">
-			    <span class="check"></span>
-			    <span class="caption">Small radio</span>
-			  </label>
-            </div>
-            <div id="switchersDiv" class="switchers draggable">
-              <label>Switcher: </label>
-              <label class="switch-original">
-			    <input type="checkbox">
-			    <span class="check"></span>
-			  </label>
-            </div>
-            <div id="textBoxDiv" class="textBox draggable">
-              <label>Textbox: </label>
-              <div class="input-control textarea">
-			    <textarea></textarea>
-			  </div>
-            </div>
-            <div id="multiSelectDiv" class="multiSelect draggable">
-              <label>Selection: </label>
-              <div class="input-control select">
-				<select>
-				  <option>1</option>
-				  <option>2</option>
-				  <option>3</option>
-				</select>
-			  </div>
-            </div>
-            <div id="fileUploadDiv" class="fileUpload draggable">
-              <div class="input-control file" data-role="input">
-                <label>File Upload: </label>
-			    <input type="file">
-			    <button class="button"><span class="mif-folder"></span></button>
-			  </div>
-            </div>
-            <div id="buttonsDiv" class="buttons draggable">
-              <label>Button: </label>
-              <input type="button" value="Button">
-            </div>
-            <div id="slidersDiv" class="sliders draggable">
-               <label>Sliders: </label>
-               <div class="slider" data-role="slider"></div>
-            </div>
-        </div>
-        <div class="cell colspan2 droppable" style="height: 600px;" id="drawspace">
-        	<h2>Input Screen</h2>
-        </div>
-        <div class="cell">
-            <h2>Status</h2>
-            <h4>Current screen: <span id="screen_status">Input</span></h4>
-            <input type="button" value="Save Screen">
-            <div></div>
-            <input type="button" value="Next Screen" onclick="get_next_screen()">
-            <input type="button" value="Prev Screen" onclick="get_prev_screen()">
-        </div>
-    </div>
-  </div>
-</body>
 </html>
