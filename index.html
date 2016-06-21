@@ -13,19 +13,45 @@
     <script src="js/jquery-ui/jquery-ui.min.js"></script>
     <script>
         created_ids = [];
+        
         screens = {
-        	"input" : {
+            "input" : {
+            	"value" : "<h2>Input Screen</h2>",
+            	"next" : "review",
+            	"prev" : "final"
+            },
+            "review" : {
+            	"value" : "<h2>Review Screen</h2>",
+            	"next" : "kbe",
+            	"prev" : "input"
+            },
+            "kbe" : {
+            	"value" : "<h2>KBE Screen</h2>",
+            	"next" : "final",
+            	"prev" : "review"
+            },
+            "final" : {
+            	"value" : "<h2>Final Screen</h2>",
+            	"next" : "input",
+            	"prev" : "kbe"
+            }
+        }
 
-        	},
-        	"review" : {
-
-        	},
-        	"kbe" : {
-
-        	},
-        	"final" : {
-
-        	}
+        function get_next_screen() {
+            curr_screen = $("#screen_status").text().toLowerCase();
+            screens[curr_screen].value = $("#drawspace").html();
+            $("#drawspace").children().remove();
+            next_screen = screens[curr_screen].next;
+            $("#drawspace").append(screens[next_screen].value);
+            $("#screen_status").text(next_screen.toUpperCase());
+        }
+        function get_prev_screen() {
+            curr_screen = $("#screen_status").text().toLowerCase();
+            screens[curr_screen].value = $("#drawspace").html();
+            $("#drawspace").children().remove();
+            prev_screen = screens[curr_screen].prev;
+            $("#drawspace").append(screens[prev_screen].value);
+            $("#screen_status").text(prev_screen.toUpperCase());
         }
         properties = {
         	"textInput": ["title", "placeholder"],
@@ -50,6 +76,7 @@
 
             if (class_type == "textInput") {     
               $("#" + text_id).children(".input-control").children("input").prop("placeholder", place_val);
+
             }
             else if (class_type == "checkboxes") {
               $("#" + text_id).children(".input-control").remove();
@@ -88,6 +115,10 @@
         function delete_element(id) {
         	$("#" + id).remove();
         	$("#dialog-" + id).remove();
+        	var i = created_ids.indexOf(id);
+            if (i != -1) {
+            	created_ids.splice(i, 1);
+            }
         }
         function generate_html(type, option) {
         	if (option == "title") {
@@ -226,16 +257,16 @@
                <div class="slider" data-role="slider"></div>
             </div>
         </div>
-        <div class="cell colspan2 droppable" style="height: 600px;">
-        	<h2>Drop here</h2>
+        <div class="cell colspan2 droppable" style="height: 600px;" id="drawspace">
+        	<h2>Input Screen</h2>
         </div>
         <div class="cell">
             <h2>Status</h2>
-            <h4>Current screen: Input</h4>
+            <h4>Current screen: <span id="screen_status">Input</span></h4>
             <input type="button" value="Save Screen">
             <div></div>
-            <input type="button" value="Next Screen">
-            <input type="button" value="Prev Screen">
+            <input type="button" value="Next Screen" onclick="get_next_screen()">
+            <input type="button" value="Prev Screen" onclick="get_prev_screen()">
         </div>
     </div>
   </div>
