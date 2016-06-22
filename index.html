@@ -155,7 +155,7 @@
         	"textBox": ["title"],
         	"multiSelect": ["title", "names"],
         	"fileUpload": ["title"],
-        	"buttons": ["title"],
+        	"buttons": ["title", "apiEndPoint", "allIDs"],
         	"sliders": ["title"]
         }
         function update_element(element_id) {
@@ -214,18 +214,27 @@
             	created_ids.splice(i, 1);
             }
         }
+        function gen_input_element(label, class_name) {
+        	return '<label>' + label + '</label>' +
+        	       '<div class="input-control text"><input type="text" class="' + class_name + 
+        	       '"></div><div></div>'
+
+        }
         function generate_html(type, option) {
         	if (option == "title") {
-        	   return '<label>Enter title: </label>' +
-        	  '<div class="input-control text"><input type="text" class="title-input"></div><div></div>'
+        	  return gen_input_element("Enter title: ", "title-input");
         	}
         	else if (option == "placeholder") {
-        		return '<label>Enter placeholder: </label>' +
-        	  '<div class="input-control text"><input type="text" class="placeholder-input"></div><div></div>'
+        	  return gen_input_element("Enter placeholder: ", "placeholder-input");
         	}
         	else if (option == "names") {
-        		return '<label>Enter various values(seperate by commas): </label>' +
-        		'<div class="input-control text"><input type="text" class="multi-input"></div><div></div>'
+        	  return gen_input_element("Enter various values (seperated by commas): ", "multi-input");
+        	}
+        	else if (option == "apiEndPoint") {
+        	  return gen_input_element("Enter API end point for this button click: ", "api-input");
+        	}
+        	else if (option == "allIDs") {
+        	  return gen_input_element("Enter all IDs of elements' data you want on this button click: ", "all-ids-input");
         	}
         }
         function generate_dialog(type, id) {
