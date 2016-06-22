@@ -136,6 +136,7 @@
             next_screen = screens[curr_screen].next;
             $("#drawspace").append(screens[next_screen].value);
             $("#screen_status").text(next_screen.toUpperCase());
+            refresh_events();
         }
         function get_prev_screen() {
             curr_screen = $("#screen_status").text().toLowerCase();
@@ -144,6 +145,7 @@
             prev_screen = screens[curr_screen].prev;
             $("#drawspace").append(screens[prev_screen].value);
             $("#screen_status").text(prev_screen.toUpperCase());
+            refresh_events();
         }
         properties = {
         	"textInput": ["title", "placeholder"],
