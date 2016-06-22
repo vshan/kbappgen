@@ -10,3 +10,7 @@
 .cell {
 	padding-left: 10px;
 }
+
+#drawspace2 > h2 {
+	color: white;
+}
