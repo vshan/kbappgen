@@ -97,10 +97,10 @@
         <div class="cell">
             <h2>Status</h2>
             <h4>Current screen: <span id="screen_status">INPUT</span></h4>
-            <input type="button" value="Save To Disk">
+            <input type="button" value="Save To Disk" onclick="save_to_server()">
             <div></div>
-            <input type="button" value="Next Screen" onclick="get_screen_of('next')">
             <input type="button" value="Prev Screen" onclick="get_screen_of('prev')">
+            <input type="button" value="Next Screen" onclick="get_screen_of('next')">
         </div>
     </div>
   </div>
@@ -109,6 +109,7 @@
         GLOBAL_COUNTER = 0;
         NUM_COLUMNS = 2;
         created_ids = [];
+        buttons = [];
         
         screens = {
             "input" : {
@@ -135,6 +136,39 @@
             	"next" : "input",
             	"prev" : "kbe"
             }
+        }
+        function generate_app_json(name) {
+            app_prop = {};
+            app_prop["name"] = name;
+            app_prop["screens"] = {
+                "input" : screens.input.value,
+                "review" : screens.review.value,
+                "kbe" : screens.kbe.value,
+                "final" : screens.final.value
+            };
+            app_prop["buttons"] = buttons;
+            app_prop["counter_value"] = GLOBAL_COUNTER;
+            return JSON.stringify(app_prop);
+        }
+        function send_to_server(json_data, server_url) {
+            $.ajax({
+              type: "POST",
+              // crossDomain: true,
+              contentType: "application/json",
+              data: json_data,
+              url: server_url,
+              dataType: "json",
+              success: function(data) {
+                         console.log("Successfully sent to server!");
+                       },
+              error:   function(result) {
+                         console.log("Something went wrong");
+                       }
+            });
+        }
+        function save_to_server() {
+            json_data = generate_app_json("App1");
+            send_to_server(json_data, "http://127.0.0.1:5001/save");
         }
         function flush_screen() {
         	for (i = 1; i <= NUM_COLUMNS; i++) {
@@ -209,8 +243,12 @@
             	$("#" + text_id + " select").append(select_labels);
             }
             else if (class_type == "buttons") {
-            	$("#" + text_id + " input").prop("value", title_val);
-            	$("#" + text_id + " > label").remove();
+                api_endpt = $(element_id).children(".input-control").children(".api-input").val();
+                all_ids_str = $(element_id).children(".input-control").children(".all-ids-input").val();
+                $("#" + text_id + "> input").prop("value", title_val);
+                $("#" + text_id + " > label").remove();
+                buttons.push({id: text_id, api_end_point: api_endpt, data_ids: all_ids_str});
+
             }
         }
         function delete_element(id) {
@@ -249,8 +287,8 @@
         	body_str = properties[type].map(function (opt) {
         		return generate_html(type, opt);
         	}).join("");
-        	footer_str = '<button class="button" id="button-' + ((id.split('-')[1]) + '') + '">Save</button>'
-        	           + '<button class="button" id="delete-' + ((id.split('-')[1]) + '') + '">Delete</button>'
+        	footer_str = '<button class="button" style="margin-left: 10px;float:right;" id="delete-' + ((id.split('-')[1]) + '') + '">Delete</button>'
+                       + '<button class="button" style="float:right;" id="button-' + ((id.split('-')[1]) + '') + '">Save</button>'
         	           + '</div>';
         	return header_str + body_str + footer_str;
         }
