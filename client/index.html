@@ -98,6 +98,7 @@
             <h2>Status</h2>
             <h4>Current screen: <span id="screen_status">INPUT</span></h4>
             <input type="button" value="Save To Disk" onclick="save_to_server()">
+            <input type="button" value="Load from Disk" onclick="load_from_server()">
             <div></div>
             <input type="button" value="Prev Screen" onclick="get_screen_of('prev')">
             <input type="button" value="Next Screen" onclick="get_screen_of('next')">
@@ -111,6 +112,8 @@
         created_ids = [];
         buttons = [];
         
+        screen_names = ["input", "review", "kbe", "final"];
+
         screens = {
             "input" : {
             	"value" : ["<h2>Input</h2>",
@@ -147,6 +150,7 @@
                 "final" : screens.final.value
             };
             app_prop["buttons"] = buttons;
+            app_prop["created_ids"] = created_ids;
             app_prop["counter_value"] = GLOBAL_COUNTER;
             return JSON.stringify(app_prop);
         }
@@ -159,12 +163,35 @@
               url: server_url,
               dataType: "json",
               success: function(data) {
-                         console.log("Successfully sent to server!");
+                        console.log("Successfully sent to server!" + data.name);
+                        setTimeout(function(){
+                            $.Notify({type: 'success', caption: 'Saved', content: "Saved to disk", icon: "<span class='mif-floppy-disk'></span>"});
+                        }, 1000);
                        },
               error:   function(result) {
                          console.log("Something went wrong");
                        }
             });
+        }
+        function get_from_server(server_url) {
+            $.get( server_url, function( data ) {
+              console.log("got this: " + JSON.stringify(data));
+              GLOBAL_COUNTER = data.counter_value/1;
+              created_ids = data.created_ids;
+              buttons = data.buttons;
+              screen_names.map(function(scr) {
+                screens[scr].value = data.screens[scr];
+              });
+              flush_screen();
+              load_html_to_screen(get_current_screen());
+              refresh_events();
+              setTimeout(function(){
+                            $.Notify({type: 'success', caption: 'Loaded', content: "Loaded from disk", icon: "<span class='mif-file-upload'></span>"});
+                        }, 1000);
+              });
+        }
+        function load_from_server() {
+            get_from_server("http://127.0.0.1:5001/load");
         }
         function save_to_server() {
             json_data = generate_app_json("App1");
@@ -175,17 +202,29 @@
         	   $("#drawspace" + i).children().remove();
             }
         }
-        function get_screen_of(opt) {
-            curr_screen = $("#screen_status").text().toLowerCase();
-            screens[curr_screen].value = screens[curr_screen].value.map(function (column, num) {
-            	return $("#drawspace" + (num+1)).html();
+        function save_html_to_screen(scr) {
+            screens[scr].value = screens[scr].value.map(function (column, num) {
+                return $("#drawspace" + (num+1)).html();
             });
+        }
+        function load_html_to_screen(scr) {
+            screens[scr].value.map(function (column, num) {
+                $("#drawspace" + (num+1)).append(column);
+            });
+        }
+        function get_current_screen() {
+            return $("#screen_status").text().toLowerCase();
+        }
+        function set_current_screen(scr) {
+            $("#screen_status").text(scr.toUpperCase());
+        }
+        function get_screen_of(opt) {
+            curr_screen = get_current_screen();
+            save_html_to_screen(curr_screen);
             flush_screen();
             opt_screen = screens[curr_screen][opt];
-            screens[opt_screen].value.map(function (column, num) {
-            	$("#drawspace" + (num+1)).append(column);
-            });
-            $("#screen_status").text(opt_screen.toUpperCase());
+            load_html_to_screen(opt_screen);
+            set_current_screen(opt_screen);
             refresh_events();
         }
         properties = {
