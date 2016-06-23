@@ -26,7 +26,7 @@
                     <li>
                         <a href="" class="dropdown-toggle">Reopen</a>
                         <ul class="d-menu" data-role="dropdown">
-                            <li><a href="">Project 1</a></li>
+                            <li><a>Project 1</a></li>
                             <li><a href="">Project 2</a></li>
                             <li><a href="">Project 3</a></li>
                             <li class="divider"></li>
@@ -222,7 +222,6 @@
         }
         function get_from_server(server_url) {
             $.get( server_url, function( data ) {
-              console.log("got this: " + JSON.stringify(data));
               GLOBAL_COUNTER = data.counter_value/1;
               created_ids = data.created_ids;
               buttons = data.buttons;
@@ -235,7 +234,7 @@
               setTimeout(function(){
                             $.Notify({type: 'success', caption: 'Loaded', content: "Loaded from disk", icon: "<span class='mif-file-upload'></span>"});
                         }, 1000);
-              });
+            });
         }
         function load_from_server() {
             get_from_server("http://127.0.0.1:5001/load");
