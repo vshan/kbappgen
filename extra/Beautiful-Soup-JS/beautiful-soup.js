@@ -167,7 +167,7 @@
             varToStoreJSON = htmlToJSON('iframe#doc');
         }
         _this.prettify = function(divToPopulate) {
-            $(divToPopulate).append($('<pre></pre>').append(prettifyCode('iframe#doc')));
+            $(divToPopulate).append($('<textarea />').append(prettifyCode('iframe#doc')).css({width:'80vw',height:'80vh'}));
         }
         execute = function(action, params) {
             if (action === 'html2json') {

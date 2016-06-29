@@ -19,7 +19,7 @@ def api_load():
 def api_save():
     if request.headers['Content-Type'] == 'application/json':
         print("Got POST data " + json.dumps(request.json))
-        print("Dir name: " + os.path.dirname(os.path.realpath(__file__)));
+        print("Dir name: " + os.path.dirname(os.path.realpath(__file__)))
         with open('data/app1.json', 'w') as outfile:
             json.dump(request.json, outfile)
         data = { 'response'  : 'true', 'name' : 'vinay' }
