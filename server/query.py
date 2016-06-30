@@ -34,6 +34,27 @@ def get_pos_tags(sentence):
   pos_tags = nltk.pos_tag(tokens)
   return [{'word': x, 'tag': y} for (x,y) in pos_tags]
 
+def get_key_from_val(dict, val):
+  for (k, v) in dict.items():
+    if v == val:
+      return k
+
+def build_model_from_fols(fol_list):
+  read_expr = nltk.sem.Expression.fromstring
+  mc = nltk.MaceCommand(None, assumptions=list(map(read_expr, fol_list)))
+  mc.build_model()
+  return mc
+
+def fol_satisfying_model(fol_string, mc):
+  read_expr = nltk.sem.Expression.fromstring
+  val = mc.valuation
+  dom = val.domain
+  model = nltk.Model(dom, val)
+  g = nltk.Assignment(dom, [])
+  sats = model.satisfiers(read_expr(fol_string), 'x', g)
+  return [get_key_from_val(dict(val), elem) for elem in sats]
+
+
 def append_to_file(line, file):
   with open(file, "a") as append_file:
     append_file.write(line + "\n")
