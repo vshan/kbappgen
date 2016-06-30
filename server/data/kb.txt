@@ -1,0 +1,4 @@
+happy(Vinay)
+happy(Vinay)
+angry(Vinay)
+exists x.(girl(x) & marry(Vinay,x))
