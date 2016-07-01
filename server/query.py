@@ -54,6 +54,29 @@ def fol_satisfying_model(fol_string, mc):
   sats = model.satisfiers(read_expr(fol_string), 'x', g)
   return [get_key_from_val(dict(val), elem) for elem in sats]
 
+def abstract_over(str):
+  return r"\x. (" + str + r")"
+
+def apply_con_to_abs(abstr, const):
+  read_expr = nltk.sem.Expression.fromstring
+  expr_str = abstr + "(" + const + ")"
+  expr = read_expr(expr_str)
+  return expr.simplify()
+
+def model_consistent(fol_list, expr):
+  read_expr = nltk.sem.Expression.fromstring
+  fol_exprs = list(map(read_expr, fol_list))
+  prover = nltk.Prover9()
+  return prover.prove(expr, fol_exprs)
+
+def is_consistent_with(fol_list, fol_str):
+  abs_fol = abstract_over(fol_str)
+  satisfiers = []
+  for const in CONST_ELEMS:
+    expr = apply_con_to_abs(abs_fol, const)
+    if (model_consistent(fol_list, expr)):
+      satisfiers.push(const)
+  return satisfiers
 
 def append_to_file(line, file):
   with open(file, "a") as append_file:
