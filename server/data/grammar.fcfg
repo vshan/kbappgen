@@ -49,7 +49,6 @@ PropN[-LOC,NUM=sg,SEM=<\P.P(Vincent)>] -> 'Vincent'
 PropN[-LOC,NUM=sg,SEM=<\P.P(Mia)>] -> 'Mia'
 PropN[-LOC,NUM=sg,SEM=<\P.P(Marsellus)>] -> 'Marsellus'
 PropN[-LOC,NUM=sg,SEM=<\P.P(Fido)>] -> 'Fido'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Vinay)>] -> 'Vinay'
 PropN[+LOC, NUM=sg,SEM=<\P.P(Noosa)>] -> 'Noosa'
 
 NP[-LOC, NUM=sg, SEM=<\P.\x.P(x)>] -> 'who' | 'Who'
@@ -107,7 +106,3 @@ P[-LOC,SEM=<\X P x.X(\y.(P(x) & with(x,y)))>] -> 'with'
 Neg[SEM=<\T P.T(\x.(- P(x)))>] -> 'not'
 
 ## APPEND BEGINS HERE
-Adj[SEM=<\x.drunk(x)>] -> 'drunk'
-Adj[SEM=<\x.happy(x)>] -> 'happy'
-Adj[SEM=<\x.angry(x)>] -> 'angry'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Robert)>] -> 'Robert'
