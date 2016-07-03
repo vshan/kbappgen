@@ -24,6 +24,13 @@ VP[NUM=?n,SEM=<app(?v,?obj)>] -> TV[NUM=?n,SEM=?v] NP[SEM=?obj]
 ## Copular VPs
 VP[NUM=?n,SEM=<app(?v,?prd)>] -> AuxP[+COP,NUM=?n,SEM=?v] Pred[SEM=?prd]
 
+## For conjuctions
+VP[NUM=?n,SEM=<app(?ccp, ?vp)>] -> VP[NUM=?n,SEM=?vp] CCP[SEM=?ccp]
+CCP[SEM=<app(?ccpt, ?vp)>] -> CCPT[SEM=?ccpt] VP[NUM=?n,SEM=?vp]
+CCP[SEM=<app(?ccpt, ?np)>] -> CCPT[SEM=?ccpt] NP[NUM=?n,SEM=?np]
+CCPT[SEM=<\Q P x.(P(x) & Q(x))>] -> 'and'
+CCPT[SEM=<\Q P x.(P(x) | Q(x))>] -> 'or'
+
 ## Do auxiliaries
 VP[+neg,NUM=?n,SEM=<app(?v,?vp)>] -> AuxP[-COP,NUM=?n,SEM=?v] VP[NUM=pl,SEM=?vp]
 
