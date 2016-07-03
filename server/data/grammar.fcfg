@@ -9,7 +9,7 @@ NP[-LOC,NUM=sg,SEM=<\Q. (- exists x. (person(x) & Q(x)))>] -> 'nobody' | 'Nobody
 NP[-LOC,NUM=sg,SEM=<\Q. exists x. (person(x) & Q(x))>] -> 'somebody' | 'Somebody'
 
 ## Copular predicates
-Pred[SEM=?prd] -> PredN[SEM=?prd] | PP[+LOC,+PRED,SEM=?prd] | Adj[SEM=?prd]
+Pred[SEM=?prd] -> PredN[SEM=?prd] | PP[+LOC,+PRED,SEM=?prd] | Adj[SEM=?prd] | N[SEM=?prd]
 
 ## Predicative NPs
 ## Doesn't bLOCk 'is every dog', but determiner SEMantics is ignored

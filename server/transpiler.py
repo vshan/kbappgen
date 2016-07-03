@@ -4,6 +4,7 @@ POS_MAP = {
   "NNP" : "PropN",
   "JJ" : "Adj",
   "NN" : "Noun",
+  "NNS" : "Noun",
   "VB" : "Verb",
   "VBD" : "Verb",
   "VBG" : "Verb",
@@ -25,7 +26,7 @@ def file_to_list(file):
 CONST_ELEMS = file_to_list(CONST_FILE)
 
 def is_plural(word):
-  word[-1] == 's'
+  return word[-1] == 's'
 
 def generate_rule_propn(word):
   CONST_ELEMS.append(word)
@@ -131,16 +132,27 @@ def model_consistent(fol_list, expr):
   prover = nltk.Prover9()
   return prover.prove(expr, fol_exprs)
 
+def begins_with_quantifier(fol_str):
+  first_word = fol_str.split()[0]
+  return (first_word == "exists" or first_word == "all")
+
 def is_consistent_with(fol_list, fol_str):
   if is_unbound_expr(fol_str):
     abs_fol = abstract_over(fol_str)
   else:
     abs_fol = fol_str
+  
   satisfiers = []
+  
+  if begins_with_quantifier(fol_str):
+    expr = nltk.sem.Expression.fromstring(fol_str)
+    return [str(model_consistent(fol_list, expr))]
+
   for const in CONST_ELEMS:
     expr = apply_con_to_abs(abs_fol, const)
     if (model_consistent(fol_list, expr)):
       satisfiers.append(const)
+  
   return satisfiers
 
 def append_to_file(line, file):
@@ -165,7 +177,11 @@ def parse_text(text):
   for tree in parser.parse(tokens):
     return str(tree.label()['SEM'])
 
+def remove_extra_chars(str):
+  return str.replace("?", "")
+
 def nl_to_fol(nl):
+  nl = remove_extra_chars(nl)
   prepare_grammar(nl)
   return parse_text(nl)
 
