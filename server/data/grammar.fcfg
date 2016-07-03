@@ -21,13 +21,18 @@ Nom[NUM=?n,SEM=<app(?pp,?nom)>] -> N[NUM=?n,SEM=?nom] PP[SEM=?pp]
 ## Transitive verbs
 VP[NUM=?n,SEM=<app(?v,?obj)>] -> TV[NUM=?n,SEM=?v] NP[SEM=?obj]
 
+## For 'to'
+NP[SEM=?np] -> TO_T NP[SEM=?np]
+TO_T -> 'to' | 'To' | 'TO'
+
 ## Copular VPs
 VP[NUM=?n,SEM=<app(?v,?prd)>] -> AuxP[+COP,NUM=?n,SEM=?v] Pred[SEM=?prd]
 
-## For conjuctions
+## For conjunctions
 VP[NUM=?n,SEM=<app(?ccp, ?vp)>] -> VP[NUM=?n,SEM=?vp] CCP[SEM=?ccp]
 CCP[SEM=<app(?ccpt, ?vp)>] -> CCPT[SEM=?ccpt] VP[NUM=?n,SEM=?vp]
 CCP[SEM=<app(?ccpt, ?np)>] -> CCPT[SEM=?ccpt] NP[NUM=?n,SEM=?np]
+CCP[SEM=<app(?ccpt, ?np)>] -> CCPT[SEM=?ccpt] PP[NUM=?n,SEM=?pp]
 CCPT[SEM=<\Q P x.(P(x) & Q(x))>] -> 'and'
 CCPT[SEM=<\Q P x.(P(x) | Q(x))>] -> 'or'
 
@@ -92,6 +97,7 @@ TV[NUM=sg,SEM=<\X y.X(\x.marry(y,x))>,tns=pres] -> 'marries'
 TV[NUM=pl,SEM=<\X y.X(\x.marry(y,x))>,tns=pres] -> 'marry'
 TV[NUM=sg,SEM=<\X y.X(\x.know(y,x))>,tns=pres] -> 'knows'
 TV[NUM=pl,SEM=<\X y.X(\x.know(y,x))>,tns=pres] -> 'know'
+TV[NUM=sg,SEM=<\X y.X(\x.walk(y,x))>,tns=pres] -> 'walks'
 TV[NUM=sg,SEM=<\X y.X(\x.see(y,x))>,tns=pres] -> 'sees'
 TV[NUM=pl,SEM=<\X y.X(\x.see(y,x))>,tns=pres] -> 'see'
 IV[NUM=sg,SEM=<\x.bark(x)>,tns=pres] -> 'barks'

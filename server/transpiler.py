@@ -67,7 +67,7 @@ def is_transitive_verb(word, pos, words):
   index = words.index({'word': word, 'tag': pos})
   try:
     next_word = words[index+1]
-    if is_noun(next_word) or is_determiner(next_word):
+    if is_noun(next_word) or is_determiner(next_word) or next_word['tag'] == 'TO':
       return True
   except IndexError:
     return False
