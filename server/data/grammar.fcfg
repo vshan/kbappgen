@@ -65,6 +65,7 @@ PropN[+LOC, NUM=sg,SEM=<\P.P(Noosa)>] -> 'Noosa'
 
 NP[-LOC, NUM=sg, SEM=<\P.\x.P(x)>] -> 'who' | 'Who'
 
+Det[NUM=sg, SEM=<\P Q.\x.(P(x) & Q(x))>] -> 'which'
 Det[NUM=sg,SEM=<\P Q.all x.(P(x) -> Q(x))>] -> 'every' | 'Every' 
 Det[NUM=pl,SEM=<\P Q.all x.(P(x) -> Q(x))>] -> 'all' | 'All'
 Det[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'some' | 'Some'
