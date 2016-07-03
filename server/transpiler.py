@@ -126,31 +126,35 @@ def apply_con_to_abs(abstr, const):
   expr = read_expr(expr_str)
   return expr.simplify()
 
-def model_consistent(fol_list, expr):
+def make_model(fol_list):
   read_expr = nltk.sem.Expression.fromstring
   fol_exprs = list(map(read_expr, fol_list))
+  return fol_exprs
+
+def model_consistent(model, expr):
   prover = nltk.Prover9()
-  return prover.prove(expr, fol_exprs)
+  return prover.prove(expr, model)
 
 def begins_with_quantifier(fol_str):
   first_word = fol_str.split()[0]
   return (first_word == "exists" or first_word == "all")
 
 def is_consistent_with(fol_list, fol_str):
+  model = make_model(fol_list)
+
   if is_unbound_expr(fol_str):
     abs_fol = abstract_over(fol_str)
   else:
     abs_fol = fol_str
   
-  satisfiers = []
-  
   if begins_with_quantifier(fol_str):
     expr = nltk.sem.Expression.fromstring(fol_str)
-    return [str(model_consistent(fol_list, expr))]
-
+    return [str(model_consistent(model, expr))]
+  
+  satisfiers = []
   for const in CONST_ELEMS:
     expr = apply_con_to_abs(abs_fol, const)
-    if (model_consistent(fol_list, expr)):
+    if (model_consistent(model, expr)):
       satisfiers.append(const)
   
   return satisfiers
@@ -167,6 +171,8 @@ def exists_in_file(word, file):
 def prepare_grammar(text):
   word_tags = get_pos_tags(text)
   for word_tag in word_tags:
+    if word_tag['word'][0].isupper() and word_tag['tag'] != 'NNP':
+      word_tag['tag'] = 'NNP'
     if not exists_in_file(word_tag['word'], GRAMMAR_FILE):
       new_rule = generate_rule(word_tag['word'], word_tag['tag'], word_tags)
       append_to_file(new_rule, GRAMMAR_FILE)
