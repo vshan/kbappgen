@@ -189,11 +189,18 @@ def remove_extra_chars(str):
 def nl_to_fol(nl):
   nl = remove_extra_chars(nl)
   prepare_grammar(nl)
-  return parse_text(nl)
+  try:
+    parsed = parse_text(nl)
+    return parsed
+  except ValueError:
+    return False
 
 def kb_add(text):
   fol_text = nl_to_fol(text)
-  append_to_file(fol_text, KB_FILE)
+  if fol_text:
+    append_to_file(fol_text, KB_FILE)
+  else:
+    return False
 
 def kb_query(text):
   fol_str = nl_to_fol(text)

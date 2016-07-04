@@ -1,4 +1,5 @@
 from flask import Flask, url_for, json, render_template, request, Response
+import transpiler
 import os
 app = Flask(__name__)
 
@@ -29,6 +30,55 @@ def api_save():
     else:
         return "415 Unsupported Media Type ;)"
 
+@app.route('/tell', methods=['POST'])
+def api_tell():
+    if request.headers['Content-Type'] == 'application/json':
+        print("Got POST data " + json.dumps(request.json))
+        stat = request.json['statement']
+        data = {}
+        if transpiler.kb_add(stat):
+            data = {'response' : 'success'}
+        else:
+            data = {'response' : 'fail'}
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    else:
+        return "415 Unsupported Media Type ;)"
+
+@app.route('/query', methods=['GET'])
+def api_query():
+    if request.headers['Content-Type'] == 'application/json':
+        print("Got POST data " + json.dumps(request.json))
+        query = request.json['query']
+        data = {}
+        sol = transpiler.kb_query(query)
+        if sol:
+            data = {'response' : 'success', 'solution' : sol}
+        else:
+            data = {'response' : 'success', 'solution' : ['Nothing found!']}
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    else:
+        return "415 Unsupported Media Type ;)"
+
+@app.route('/fol_query', methods=['GET'])
+def api_fol_query():
+    if request.headers['Content-Type'] == 'application/json':
+        print("Got POST data " + json.dumps(request.json))
+        query = request.json['query']
+        data = {}
+        sol = transpiler.kb_fol_query(query)
+        if sol:
+            data = {'response' : 'success', 'solution' : sol}
+        else:
+            data = {'response' : 'success', 'solution' : ['Nothing found!']}
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    else:
+        return "415 Unsupported Media Type ;)"
 
 if __name__ == '__main__':
     app.run(port=int("5001"))
