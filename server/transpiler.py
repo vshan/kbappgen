@@ -12,6 +12,7 @@ POS_MAP = {
   "VBP" : "Verb",
   "VBZ" : "Verb",
   "IN" : "P",
+  "RP" : "P",
   "CD" : "PropN"
 }
 
