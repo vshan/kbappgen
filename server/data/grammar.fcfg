@@ -7,6 +7,11 @@ NP[LOC=?l,NUM=?n,SEM=?np] -> PropN[LOC=?l,NUM=?n,SEM=?np]
 
 NP[-LOC,NUM=sg,SEM=<\Q. (- exists x. (person(x) & Q(x)))>] -> 'nobody' | 'Nobody'
 NP[-LOC,NUM=sg,SEM=<\Q. exists x. (person(x) & Q(x))>] -> 'somebody' | 'Somebody'
+NP[-LOC,NUM=sg,SEM=<\Q. all x. (person(x) & Q(x))>] -> 'everybody' | 'Everybody'
+
+NP[SEM=<\P. exists x. (P(x))>] -> 'somewhere' | 'Somewhere' | 'anywhere' | 'Anywhere'
+NP[SEM=<\P. all x. (P(x))>] -> 'everywhere' | 'Everywhere'
+
 
 ## Copular predicates
 Pred[SEM=?prd] -> PredN[SEM=?prd] | PP[+LOC,+PRED,SEM=?prd] | Adj[SEM=?prd] | N[SEM=?prd]
@@ -22,8 +27,8 @@ Nom[NUM=?n,SEM=<app(?pp,?nom)>] -> N[NUM=?n,SEM=?nom] PP[SEM=?pp]
 VP[NUM=?n,SEM=<app(?v,?obj)>] -> TV[NUM=?n,SEM=?v] NP[SEM=?obj]
 
 ## For 'to'
-NP[SEM=?np] -> TO_T NP[SEM=?np]
-TO_T -> 'to' | 'To' | 'TO'
+## NP[SEM=?np] -> TO_T NP[SEM=?np]
+## TO_T -> 'to' | 'To' | 'TO'
 
 ## Copular VPs
 VP[NUM=?n,SEM=<app(?v,?prd)>] -> AuxP[+COP,NUM=?n,SEM=?v] Pred[SEM=?prd]
@@ -35,6 +40,9 @@ CCP[SEM=<app(?ccpt, ?np)>] -> CCPT[SEM=?ccpt] NP[NUM=?n,SEM=?np]
 CCP[SEM=<app(?ccpt, ?np)>] -> CCPT[SEM=?ccpt] PP[NUM=?n,SEM=?pp]
 CCPT[SEM=<\Q P x.(P(x) & Q(x))>] -> 'and'
 CCPT[SEM=<\Q P x.(P(x) | Q(x))>] -> 'or'
+
+## For 'at' preposition
+NP[NUM=?n,SEM=<app(?pp, ?np)>] -> NP[NUM=?n,SEM=?np] PP[SEM=?pp]
 
 ## Do auxiliaries
 VP[+neg,NUM=?n,SEM=<app(?v,?vp)>] -> AuxP[-COP,NUM=?n,SEM=?v] VP[NUM=pl,SEM=?vp]
@@ -54,13 +62,13 @@ PP[LOC=?l,PRED=?prd,SEM=<app(?p,?np)>] -> P[LOC=?l,PRED=?prd,SEM=?p] NP[LOC=?l,S
 # Lexical Rules
 #############################
 
-PropN[-LOC,NUM=sg,SEM=<\P.P(John)>] -> 'John'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Mary)>] -> 'Mary'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Suzie)>] -> 'Suzie'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Vincent)>] -> 'Vincent'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Mia)>] -> 'Mia'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Marsellus)>] -> 'Marsellus'
-PropN[-LOC,NUM=sg,SEM=<\P.P(Fido)>] -> 'Fido'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Dev)>] -> 'Dev'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Ruchi)>] -> 'Ruchi'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Daenerys)>] -> 'Daenerys'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Aegon)>] -> 'Aegon'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Rhaella)>] -> 'Rhaella'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Baelor)>] -> 'Baelor'
+PropN[-LOC,NUM=sg,SEM=<\P.P(Rhaegar)>] -> 'Rhaegar'
 PropN[+LOC, NUM=sg,SEM=<\P.P(Noosa)>] -> 'Noosa'
 
 NP[-LOC, NUM=sg, SEM=<\P.\x.P(x)>] -> 'who' | 'Who'
@@ -96,6 +104,8 @@ Adj[SEM=<\x.married(x)>] -> 'married'
 
 TV[NUM=sg,SEM=<\X y.X(\x.chase(y,x))>,tns=pres] -> 'chases'
 TV[NUM=pl,SEM=<\X y.X(\x.chase(y,x))>,tns=pres] -> 'chase'
+TV[NUM=sg,SEM=<\X y.X(\x.throw(y,x))>,tns=pres] -> 'throws'
+TV[NUM=pl,SEM=<\X y.X(\x.throw(y,x))>,tns=pres] -> 'throw'
 TV[NUM=sg,SEM=<\X y.X(\x.marry(y,x))>,tns=pres] -> 'marries'
 TV[NUM=pl,SEM=<\X y.X(\x.marry(y,x))>,tns=pres] -> 'marry'
 TV[NUM=sg,SEM=<\X y.X(\x.know(y,x))>,tns=pres] -> 'knows'
@@ -111,6 +121,8 @@ IV[NUM=sg,SEM=<\x.walk(x)>,tns=pres] -> 'walks'
 IV[NUM=pl,SEM=<\x.walk(x)>,tns=pres] -> 'walk'
 IV[NUM=pl,SEM=<\x.dance(x)>,tns=pres] -> 'dance'
 IV[NUM=sg,SEM=<\x.dance(x)>,tns=pres] -> 'dances'
+IV[NUM=pl,SEM=<\x.go(x)>,tns=pres] -> 'go'
+IV[NUM=sg,SEM=<\x.go(x)>,tns=pres] -> 'goes'
 
 Aux[+COP,NUM=sg,SEM=<\P x.P(x)>,tns=pres] -> 'is'
 Aux[+COP,NUM=pl,SEM=<\P x.P(x)>,tns=pres] -> 'are'
@@ -120,6 +132,10 @@ Aux[-COP,NUM=pl,SEM=<\P x.P(x)>,tns=pres] -> 'do'
 P[+LOC,-PRED,SEM=<\X P x.X(\y.(P(x) & in(x,y)))>] -> 'in'
 P[+LOC,+PRED,SEM=<\X x.X(\y.in(x,y))>] -> 'in'
 P[-LOC,SEM=<\X P x.X(\y.(P(x) & with(x,y)))>] -> 'with'
+P[SEM=<\X P x.X(\y.(P(x) & at(x,y)))>] -> 'at'
+P[SEM=<\X P x.X(\y.(P(x) & of(x,y)))>] -> 'of'
+P[SEM=<\X P x.X(\y.(P(x) & for(x,y)))>] -> 'for'
+P[SEM=<\X P x.X(\y.(P(x) & to(x,y)))>] -> 'to'
 
 Neg[SEM=<\T P.T(\x.(- P(x)))>] -> 'not'
 

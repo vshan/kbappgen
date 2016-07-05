@@ -10,7 +10,9 @@ POS_MAP = {
   "VBG" : "Verb",
   "VBN" : "Verb",
   "VBP" : "Verb",
-  "VBZ" : "Verb"
+  "VBZ" : "Verb",
+  "IN" : "P",
+  "CD" : "PropN"
 }
 
 GRAMMAR_FILE = "data/grammar.fcfg"
@@ -41,6 +43,9 @@ def generate_rule_noun(word):
     return r"N[NUM=pl,SEM=<\x." + word[0:-1] + r"(x)>] -> '" + word + r"'"
   else:
     return r"N[NUM=sg,SEM=<\x." + word + r"(x)>] -> '" + word + r"'"
+
+def generate_preposition(word):
+  return r"P[SEM=<\X P x.X(\y.(P(x) & " + word + r"(x,y)))>] -> '" + word + r"'"
 
 def generate_trans_verb(word):
   # In verb, if last letter is s, then singular
@@ -81,6 +86,8 @@ def generate_rule(word, pos, words):
     return generate_rule_adj(word)
   elif POS_MAP[pos] == "Noun":
     return generate_rule_noun(word)
+  elif POS_MAP[pos] == "P":
+    return generate_preposition(word)
   elif POS_MAP[pos] == "Verb":
     if is_transitive_verb(word, pos, words):
       return generate_trans_verb(word)
